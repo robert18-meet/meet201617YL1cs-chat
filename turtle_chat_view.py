@@ -1,5 +1,5 @@
 #2016-2017 PERSONAL PROJECTS: TurtleChat!
-#WRITE YOUR NAME HERE!
+#WRITE YOUR NAME HERE! Robert
 
 #####################################################################################
 #                                   IMPORTS                                         #
@@ -66,6 +66,14 @@
 #Read the comments below for hints and directions.
 ##################################################################
 ##################################################################
+import turtle
+from turtle_chat_client import Client 
+from turtle_chat_widgets import Button,TextInput
+class TextBox(TextInput):
+    def draw_box(self):
+        turtle.goto(self.pos)
+        turtle.
+        
 class View:
     _MSG_LOG_LENGTH=5 #Number of messages to retain in view
     _SCREEN_WIDTH=300

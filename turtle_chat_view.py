@@ -1,18 +1,35 @@
 #2016-2017 PERSONAL PROJECTS: TurtleChat!
-#WRITE YOUR NAME HERE! Robert
-
+#Robert Kostrov
 #####################################################################################
 #                                   IMPORTS                                         #
 #####################################################################################
-#import the turtle module
-#import the Client class from the turtle_chat_client module
-#Finally, from the turtle_chat_widgets module, import two classes: Button and TextInput
+import turtle
+from turtle_chat_client import Client 
+from turtle_chat_widgets import Button,TextInput
 #####################################################################################
 #####################################################################################
-
 #####################################################################################
 #                                   TextBox                                         #
 #####################################################################################
+class TextBox(TextInput):
+    def draw_box(self):
+        #making a box
+        turtle.hideturtle()
+        box=turtle.clone()
+        box.penup()
+        box.goto(-self.width/2+self.pos[0],self.pos[1]-self.height/2-50)
+        box.pendown()
+        box.hideturtle()
+        box.goto(self.width+-self.width/2+self.pos[0],self.pos[1]-self.height/2-50)
+        box.goto(self.width+-self.width/2+self.pos[0],self.pos[1]-self.height/2+self.height-50)
+        box.goto(-self.width/2+self.pos[0],self.pos[1]-self.height/2+self.height-50)
+        box.goto(-self.width/2+self.pos[0],self.pos[1]-self.height/2-50)
+        box.penup()
+        #done making box
+    def write_msg(self):
+        self.writer.clear()
+        self.writer.write(self.new_msg)
+        
 #Make a class called TextBox, which will be a subclass of TextInput.
 #Because TextInput is an abstract class, you must implement its abstract
 #methods.  There are two:
@@ -65,15 +82,7 @@
 #
 #Read the comments below for hints and directions.
 ##################################################################
-##################################################################
-import turtle
-from turtle_chat_client import Client 
-from turtle_chat_widgets import Button,TextInput
-class TextBox(TextInput):
-    def draw_box(self):
-        turtle.goto(self.pos)
-        turtle.
-        
+##################################################################        
 class View:
     _MSG_LOG_LENGTH=5 #Number of messages to retain in view
     _SCREEN_WIDTH=300

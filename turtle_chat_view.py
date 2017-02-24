@@ -73,7 +73,30 @@ class TextBox(TextInput):
 #####################################################################################
 #####################################################################################
 
-
+class SendButton(Button):
+    def __init__(self,view,my_turtle=None,shape=None,pos=(0,-150)):
+        if my_turtle==None:
+            self.turtle=turtle.clone()
+        else:
+            self.turtle=my_turtle
+        self.turtle.speed(0)
+        self.turtle.hideturtle()
+        self.turtle.penup()
+        self.turtle.goto(pos)
+        screen=turtle.Screen()
+        if shape is None:
+            self.turtle.shape('square')
+            self.turtle.shapesize(2,10)
+        else:
+            turtle.addshape(shape)
+            self.turtle.shape(shape)
+        self.turtle.showturtle()
+        self.turtle.onclick(self.fun) 
+        turtle.listen()
+        self.view=view
+    def fun(self,x=0,y=0):
+        self.view.send_msg()
+    
 ##################################################################
 #                             View                               #
 ##################################################################
@@ -97,12 +120,13 @@ class View:
         ###
         #Store the username and partner_name into the instance.
         ###
-
+        self.partner_name=partner_name
+        self.username=username
         ###
         #Make a new client object and store it in this instance of View
         #(i.e. self).  The name of the instance should be my_client
         ###
-
+        turtle.setup(width=500,height=500,startx=None,starty=None)
         ###
         #Set screen dimensions using turtle.setup
         #You can get help on this function, as with other turtle functions,
@@ -113,7 +137,12 @@ class View:
         #
         #at the Python shell.
         ###
-
+        my_client=Client()
+        self.my_client=my_client
+        textbox=TextBox()
+        self.textbox=textbox
+        self.textbox.draw_box()
+        self.button=SendButton(self)
         ###
         #This list will store all of the messages.
         #You can add strings to the front of the list using
@@ -138,6 +167,15 @@ class View:
         #Call your setup_listeners() function, if you have one,
         #and any other remaining setup functions you have invented.
         ###
+        self.turtle_queue=[]=list()
+        x=5
+        for i in range (x):
+            self.msg_queue.insert(i," ")
+            self.turtle_queue.append(turtle.clone())
+        for j in range (x):
+            self.turtle_queue[j].hideturtle()
+            self.turtle_queue[j].penup()
+            self.turtle_queue[j].goto(-100,j*10)
 
     def send_msg(self):
         '''
@@ -149,6 +187,10 @@ class View:
         It should call self.display_msg() to cause the message
         display to be updated.
         '''
+        self.my_client.send(self.textbox.new_msg)
+        self.msg_queue.insert(0,self.textbox.new_msg)
+        self.display_msg()
+        self.textbox.clear_msg()
         pass
 
     def get_msg(self):
@@ -167,7 +209,8 @@ class View:
 
         Then, it can call turtle.listen()
         '''
-        pass
+        turtle.listen()
+        
 
     def msg_received(self,msg):
         '''
@@ -179,7 +222,9 @@ class View:
                     - this should be displayed on the screen
         '''
         print(msg) #Debug - print message
-        show_this_msg=self.partner_name+' says:\r'+ msg
+        show_this_msg=self.partner_name+' says:\r \r \r'+ msg
+        self.msg_queue.insert(0,show_this_msg)
+        self.display_msg()
         #Add the message to the queue either using insert (to put at the beginning)
         #or append (to put at the end).
         #
@@ -190,7 +235,12 @@ class View:
         This method should update the messages displayed in the screen.
         You can get the messages you want from self.msg_queue
         '''
-        pass
+        x=5
+        for i in range (x):
+            self.turtle_queue[i].clear()
+        for j in range (x):
+            self.turtle_queue[j].write(self.msg_queue[j])
+        
 
     def get_client(self):
         return self.my_client
